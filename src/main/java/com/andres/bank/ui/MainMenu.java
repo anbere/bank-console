@@ -22,21 +22,18 @@ public class MainMenu implements Menu {
 			{
 			
 			case "1":
-//				Menu loginMenu = new LoginMenu();
-//				loginMenu.display();
-				System.out.println("Login Menu");
+				Menu loginMenu = new LoginMenu();
+				loginMenu.display();
 				choice = "0";
 				break;
 			case "2":
-//				Menu registrationMenu = new RegistrationMenu();
-//				registrationMenu.display();
-				System.out.println("Registration Menu");
+				Menu registrationMenu = new RegistrationMenu();
+				registrationMenu.display();
 				choice = "0";
 				break;
 			case "3":
-//				Menu employeeLoginMenu = new EmployeeLoginMenu();
-//				employeeLoginMenu.display();
-				System.out.println("Employee Menu");
+				Menu employeeAdminMenu = new EmployeeAdminMenu();
+				employeeAdminMenu.display();
 				choice = "0";
 				break;
 			case "4":

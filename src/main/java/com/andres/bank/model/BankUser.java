@@ -1,25 +1,28 @@
 package com.andres.bank.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class BankUser {
-	private String name;
+public class BankUser implements Serializable{
+	private String username;
 	private String password;
+	private ArrayList<String> accountIDs;
 	
 	public BankUser() {};
 	
 	public BankUser(String name, String password) {
 		super();
-		this.name = name;
+		this.username = name;
 		this.password = password;
 	}
 
 	public String getName() {
-		return name;
+		return username;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.username = name;
 	}
 
 	public String getPassword() {
@@ -32,12 +35,7 @@ public class BankUser {
 
 	@Override
 	public String toString() {
-		return "BankUser [name=" + name + ", password=" + password + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, password);
+		return "BankUser [name=" + username + ", password=" + password + "]";
 	}
 
 	@Override
@@ -49,10 +47,8 @@ public class BankUser {
 		if (getClass() != obj.getClass())
 			return false;
 		BankUser other = (BankUser) obj;
-		return Objects.equals(name, other.name) && Objects.equals(password, other.password);
+		return Objects.equals(username, other.username) && Objects.equals(password, other.password);
 	}
-	
-	
 	
 	
 }

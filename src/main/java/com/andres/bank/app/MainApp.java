@@ -14,9 +14,8 @@ public class MainApp {
 		try {
 			main.display();
 		} catch (Exception e) {
+//			e.printStackTrace();
 			System.err.println("oops");
-		}finally {
-			System.out.println("end");
 		}
 		
 	}
