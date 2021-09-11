@@ -12,5 +12,7 @@ public interface AccountsDAO {
 	public ArrayList<Account> getActiveAccounts(String username);
 
 	public void deposit(double depositAmount, String accKey);
+	
+	public void withdraw(double depositAmount, String accKey);
 
 }

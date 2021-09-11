@@ -1,5 +1,7 @@
 package com.andres.bank.ui;
 
+import java.sql.SQLException;
+
 import com.andres.bank.exceptions.BlankEntryException;
 import com.andres.bank.exceptions.IncorrectPasswordException;
 import com.andres.bank.exceptions.UserNotFoundException;
@@ -68,6 +70,9 @@ public class LoginMenu implements Menu{
 			}catch(BlankEntryException | UserNotFoundException e)
 			{
 				System.out.println(e.getMessage());
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
 			

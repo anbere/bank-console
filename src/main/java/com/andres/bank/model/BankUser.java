@@ -1,13 +1,9 @@
 package com.andres.bank.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
-
-public class BankUser implements Serializable{
+public class BankUser{
 	private String username;
 	private String password;
-	private ArrayList<String> accountIDs;
+	//private ArrayList<String> accountIDs;
 	
 	public BankUser() {};
 	
@@ -37,18 +33,5 @@ public class BankUser implements Serializable{
 	public String toString() {
 		return "BankUser [name=" + username + ", password=" + password + "]";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BankUser other = (BankUser) obj;
-		return Objects.equals(username, other.username) && Objects.equals(password, other.password);
-	}
-	
 	
 }

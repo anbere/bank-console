@@ -1,15 +1,15 @@
 package com.andres.bank.dao;
 
-import com.andres.bank.exceptions.UsernameTakenException;
-import com.andres.bank.model.BankUser;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public interface BankUserDAO {
 
 	
-	public boolean hasCorrectUsername(String username);
+	public boolean hasCorrectUsername(String username, Connection con) throws SQLException;
 
-	public boolean hasCorrectPassword(String username, String password);
+	public boolean hasCorrectPassword(String username, String password, Connection con) throws SQLException;
 
-	public void createNewUser(String username, String password) throws UsernameTakenException;
+	public void createNewUser(String username, String password, Connection con) throws SQLException;
 	
 }

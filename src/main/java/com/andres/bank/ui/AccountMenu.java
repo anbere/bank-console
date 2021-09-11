@@ -35,24 +35,96 @@ public class AccountMenu implements Menu {
 
 		} catch (NoAccountFoundException e) {
 			System.out.println(e.getMessage());
+			return;
 		}
 
-		if (!userAccounts.isEmpty()) {
-			String choice = "0";
-			do {
-				if (userAccounts.size() == 1) {
+		String choice = "0";
+		do {
+			if (userAccounts.size() == 1) {
+				System.out.println("\nWhat would you like to do?");
+				System.out.println("\n1: Deposit");
+				System.out.println("2: Withdraw");
+				System.out.println("3: Account Transfers");
+				System.out.println("4: Exit");
+
+				choice = AccountMenu.scn.nextLine();
+
+				if (choice.equals("4")) {
+					break;
+				}
+
+				switch (choice) {
+				case "1":
+					String depositAmount;
+					System.out.println("Enter the amount you would like to deposit, or enter E to exit.");
+
+					depositAmount = AccountMenu.scn.nextLine();
+					double deposit = Double.parseDouble(depositAmount);
+
+					if (depositAmount.equals("e") || depositAmount.equals("E")) {
+						break;
+					}
+
+					try {
+						accountActionsService.deposit(userAccounts.get(0), deposit);
+						System.out.println("Deposit of " + depositAmount + "succesful.");
+					} catch (BlankEntryException e) {
+						System.out.println(e.getMessage());
+					} catch (InvalidInputException e) {
+						System.out.println(e.getMessage());
+					}
+					choice = "0";
+					break;
+				case "2":
+					String withdrawAmount;
+					System.out.println("Enter the amount you would like to withdraw, or enter E to exit.");
+
+					withdrawAmount = AccountMenu.scn.nextLine();
+					double withdraw = Double.parseDouble(withdrawAmount);
+
+					if (withdrawAmount.equals("e") || withdrawAmount.equals("E")) {
+						break;
+					}
+					
+					try {
+						accountActionsService.withdraw(userAccounts.get(0), withdraw);
+						System.out.println("Your withdrawal of: " + withdrawAmount + " was successful.");
+					} catch (BlankEntryException e) {
+						System.out.println(e.getMessage());
+					} catch (InvalidInputException e) {
+						System.out.println(e.getMessage());
+					}
+					
+					choice = "0";
+					
+					break;
+				case "4":
+					break;
+				default:
+					System.out.println("Invalid choice, choose again.");
+
+				}
+			} else {
+				String accType = "0";
+				System.out.println("\nWould you like to work with your CHECKING or SAVING account?");
+				do {
+					System.out.println("'1' to Cancel");
+
+					accType = AccountMenu.scn.nextLine();
+
+					if (accType.equals("1")) 
+					{
+						return;
+					}
+					
 					System.out.println("\nWhat would you like to do?");
 					System.out.println("\n1: Deposit");
 					System.out.println("2: Withdraw");
 					System.out.println("3: Account Transfers");
 					System.out.println("4: Exit");
 
-					choice = AccountMenu.scn.nextLine();
-
-					if (choice.equals("4")) {
-						break;
-					}
-
+					choice = scn.nextLine();
+					
 					switch (choice) {
 					case "1":
 						String depositAmount;
@@ -66,8 +138,14 @@ public class AccountMenu implements Menu {
 						}
 
 						try {
-							accountActionsService.deposit(userAccounts.get(0), deposit);
-							System.out.println("Deposit of " + depositAmount + "succesful.");
+							if(accType.equals("CHECKING")) {
+								accountActionsService.deposit(userAccounts.get(0), deposit);
+							} else if (accType.equals("SAVING"))
+							{
+								accountActionsService.deposit(userAccounts.get(1), deposit);
+							}
+							System.out.println("Deposit of " + depositAmount + " succesful.");
+							break;
 						} catch (BlankEntryException e) {
 							System.out.println(e.getMessage());
 						} catch (InvalidInputException e) {
@@ -75,39 +153,44 @@ public class AccountMenu implements Menu {
 						}
 						choice = "0";
 						break;
+					case "2":
+						String withdrawAmount;
+						System.out.println("Enter the amount you would like to withdraw, or enter E to exit.");
+
+						withdrawAmount = AccountMenu.scn.nextLine();
+						double withdraw = Double.parseDouble(withdrawAmount);
+
+						if (withdrawAmount.equals("e") || withdrawAmount.equals("E")) {
+							break;
+						}
+						
+						try {
+							if(accType.equals("CHECKING"))
+							{
+								accountActionsService.withdraw(userAccounts.get(0), withdraw);
+							} else if (accType.equals("SAVING"))
+							{
+								accountActionsService.withdraw(userAccounts.get(1), withdraw);
+							}
+							System.out.println("Your withdrawal of: " + withdrawAmount + " was successful.");
+							break;
+						} catch (BlankEntryException e) {
+							System.out.println(e.getMessage());
+						} catch (InvalidInputException e) {
+							System.out.println(e.getMessage());
+						}
 					case "4":
 						break;
 					default:
 						System.out.println("Invalid choice, choose again.");
 
 					}
-				} else {
-					String accType = "0";
-					System.out.println("CHECKING or SAVING?");
-					do {
-						System.out.println("'1' to Cancel");
 
-						accType = AccountMenu.scn.nextLine();
+				} while (accType.equals("0"));
 
-						if (accType.equals("1")) {
-							break;
-						}
+			}
 
-						if (accType.equals("CHECKING")) {
-							System.out.println("In checking");
-						} else if (accType.equals("SAVING")) {
-							System.out.println("In savings");
-							
-						} else {
-							System.out.println("Invalid choice, type CHECKING or SAVING");
-							accType = "0";
-						}
-					} while(accType.equals("0"));
-
-				}
-
-			} while (choice.equals("0"));
-		}
+		} while (choice.equals("0"));
 
 	}
 

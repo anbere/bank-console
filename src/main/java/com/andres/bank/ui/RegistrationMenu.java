@@ -7,13 +7,13 @@ import com.andres.bank.service.UserCreatorService;
 
 public class RegistrationMenu implements Menu {
 
+	UserCreatorService userCreatorService = new UserCreatorService();
+	
 	@Override
 	public void display() {
 		String username;
 		String password;
 		boolean wasRegistered = false;
-		
-		UserCreatorService userAccess = new UserCreatorService();
 		
 		do {
 			System.out.println("\n----- Registration Menu -----");
@@ -28,7 +28,7 @@ public class RegistrationMenu implements Menu {
 			}
 			
 			System.out.println("\nType /'1/' to Cancel.");
-			System.out.println("\nPlease enter you desired password: ");
+			System.out.println("\nPlease enter a password: ");
 			
 			password = RegistrationMenu.scn.nextLine();
 			
@@ -39,7 +39,7 @@ public class RegistrationMenu implements Menu {
 			
 			try
 			{
-				userAccess.createUser(username, password);
+				userCreatorService.createUser(username, password);
 				wasRegistered = true;
 				System.out.println("\nUser created with the username: " + username);
 			}catch(UsernameTakenException e)
@@ -52,7 +52,7 @@ public class RegistrationMenu implements Menu {
 				wasRegistered = false;
 			}catch(InvalidPasswordException e)
 			{
-				System.out.println("\nInvalid password, no whitespace and empty username not allowed. Try again.");
+				System.out.println("\nInvalid password, no whitespace and empty password not allowed. Try again.");
 				wasRegistered = false;
 			}
 			

@@ -1,7 +1,10 @@
 package com.andres.bank.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import com.andres.bank.exceptions.ProcessingApplicationException;
 import com.andres.bank.model.Account;
@@ -57,6 +60,14 @@ public class AccountsDAOImpl implements AccountsDAO {
 			
 		}
 		
+		if(accounts.size() == 2)
+		{
+			if(accounts.get(0).getAccountType().equals("SAVING"))
+			{
+				Collections.swap(accounts, 0, 1);
+			}
+		}
+		
 		return accounts;
 	}
 
@@ -70,9 +81,17 @@ public class AccountsDAOImpl implements AccountsDAO {
 		currentMap.put(accKey, updated);
 		
 		AccountsUtil.writeToAccountList(currentMap);
+	}
+	
+	public void withdraw(double withdrawAmount, String accKey)
+	{
+		HashMap<String, Account> currentMap = AccountsUtil.currentAccountsMap();
+		Account updated = currentMap.get(accKey);
 		
-		System.out.println("Updated balance.");
-
+		updated.setBalance(updated.getBalance() - withdrawAmount);
+		currentMap.put(accKey, updated);
+		
+		AccountsUtil.writeToAccountList(currentMap);
 	}
 
 

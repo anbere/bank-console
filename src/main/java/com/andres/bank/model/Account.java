@@ -71,9 +71,6 @@ public class Account implements Serializable{
 	public String toString() {
 		return "\nAccount type: " + accountType + "\nCurrent Balance: " + balance;
 	}
-
-
-	
 	
 	
 }

@@ -12,7 +12,6 @@ public class AccountActionsService {
 	
 	public void deposit(Account accountBeingAccessed, double depositAmount) throws BlankEntryException, InvalidInputException
 	{
-		Account account = null;
 		String deposit = String.valueOf(depositAmount);
 		String accKey = accountBeingAccessed.getAccountOwner() + accountBeingAccessed.getAccountType();
 		
@@ -27,4 +26,24 @@ public class AccountActionsService {
 		accountsDAO.deposit(depositAmount, accKey);
 		
 	}
+	
+	public void withdraw(Account accountBeingAccessed, double withdrawAmount) throws BlankEntryException, InvalidInputException
+	{
+		String withdraw = String.valueOf(withdrawAmount);
+		String accKey = accountBeingAccessed.getAccountOwner() + accountBeingAccessed.getAccountType();
+		
+		if (withdraw.matches("^\\s*$") || withdraw == null)
+		{
+			throw new BlankEntryException("Nothing was entered");
+		}
+		
+		if(withdrawAmount > accountBeingAccessed.getBalance())
+		{
+			throw new InvalidInputException("Insufficient funds, withdraw a smaller amount.");
+		}
+		
+		accountsDAO.withdraw(withdrawAmount, accKey);
+		
+	}
+	
 }
