@@ -1,10 +1,11 @@
 package com.andres.bank.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import com.andres.bank.exceptions.ProcessingApplicationException;
 import com.andres.bank.model.Account;
@@ -13,61 +14,72 @@ import com.andres.bank.util.AccountsUtil;
 public class AccountsDAOImpl implements AccountsDAO {
 
 	@Override
-	public boolean applyForNewAccount(String accountType, double initialBalance, String username) throws ProcessingApplicationException 
-	{
-		HashMap<String, Account> currentMap = new HashMap<>();
-		Account account = new Account(accountType, initialBalance, username);		
-		String uniqID = username + accountType;
-		
-		//Reads in currentMap from accounts
-		currentMap = AccountsUtil.currentAccountsMap();
-		
-		for(String key: currentMap.keySet())
-		{
-			if(key.equals(uniqID))
-			{
-				throw new ProcessingApplicationException(accountType + " account already applied for. Please wait for processing.");
-			}
-		}
-		
-		//Adds new pending account
+	public boolean applyForNewAccount(String accountType, double initialBalance, String username, Connection con)
+			throws ProcessingApplicationException, SQLException {
 
-		currentMap.put(uniqID, account);
-		
-		//Writes to account file new currentMap
-		AccountsUtil.writeToAccountList(currentMap);
-		
+		String sql = "INSERT INTO bank_console.pending_accounts(account_owner,account_type,initial_balance,status) VALUES(?,?,?,'PENDING');";
+
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		pstmt.setString(1, username);
+		pstmt.setString(2, accountType);
+		pstmt.setDouble(3, initialBalance);
+
+		int count = pstmt.executeUpdate();
+
+		if (count != 1) {
+			return false;
+		}
+
 		return true;
+
 	}
 
 	@Override
-	public ArrayList<Account> getActiveAccounts(String username) {
-		HashMap<String, Account> currentMap = AccountsUtil.currentAccountsMap();
-		ArrayList<Account> accounts = new ArrayList<Account>();
-		
-		String key1 = username + "CHECKING";
-		String key2 = username + "SAVING";
-		
-		for(String key: currentMap.keySet())
-		{
-			if(key.equals(key1))
-			{
-				accounts.add(currentMap.get(key1));
-			}else if(key.equals(key2))
-			{
-				accounts.add(currentMap.get(key2));
-			}
-			
+	public ArrayList<Account> getActiveAccounts(String username, Connection con) throws SQLException {
+
+		ArrayList<Account> accounts = new ArrayList<>();
+
+		String sql = "SELECT * FROM bank_console.active_accounts WHERE account_owner = ?;";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, username);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		String status = "ACTIVE";
+
+		while (rs.next()) {
+			int accountNumber = rs.getInt("account_number");
+			String accountOwner = rs.getString("account_owner");
+			String accountType = rs.getString("account_type");
+			double balance = rs.getDouble("balance");
+
+			accounts.add(new Account(status, accountNumber, accountType, balance, accountOwner));
 		}
+
+		return accounts;
+	}
+
+	public ArrayList<Account> getPendingAccounts(String username, Connection con) throws SQLException {
 		
-		if(accounts.size() == 2)
-		{
-			if(accounts.get(0).getAccountType().equals("SAVING"))
-			{
-				Collections.swap(accounts, 0, 1);
-			}
+		ArrayList<Account> accounts = new ArrayList<>();
+
+		String sql = "SELECT * FROM bank_console.pending_accounts WHERE account_owner = ?;";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, username);
+
+		ResultSet rs = pstmt.executeQuery();
+		
+		String status = "PENDING";
+		
+		while (rs.next()) {
+			String accountOwner = rs.getString("account_owner");
+			String accountType = rs.getString("account_type");
+			double balance = rs.getDouble("initial_balance");
+
+			accounts.add(new Account(status, accountType, balance, accountOwner));
 		}
-		
+
 		return accounts;
 	}
 
@@ -75,24 +87,22 @@ public class AccountsDAOImpl implements AccountsDAO {
 	public void deposit(double depositAmount, String accKey) {
 		HashMap<String, Account> currentMap = AccountsUtil.currentAccountsMap();
 		Account updated = currentMap.get(accKey);
-		
+
 		updated.setBalance(updated.getBalance() + depositAmount);
 //		currentMap.remove(accKey);
 		currentMap.put(accKey, updated);
-		
-		AccountsUtil.writeToAccountList(currentMap);
-	}
-	
-	public void withdraw(double withdrawAmount, String accKey)
-	{
-		HashMap<String, Account> currentMap = AccountsUtil.currentAccountsMap();
-		Account updated = currentMap.get(accKey);
-		
-		updated.setBalance(updated.getBalance() - withdrawAmount);
-		currentMap.put(accKey, updated);
-		
+
 		AccountsUtil.writeToAccountList(currentMap);
 	}
 
+	public void withdraw(double withdrawAmount, String accKey) {
+		HashMap<String, Account> currentMap = AccountsUtil.currentAccountsMap();
+		Account updated = currentMap.get(accKey);
+
+		updated.setBalance(updated.getBalance() - withdrawAmount);
+		currentMap.put(accKey, updated);
+
+		AccountsUtil.writeToAccountList(currentMap);
+	}
 
 }

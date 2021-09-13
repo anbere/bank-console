@@ -16,7 +16,7 @@ public class MainMenu implements Menu {
 			System.out.println("3: Employee Portal");
 			System.out.println("4: Exit");
 
-			choice = Menu.scn.nextLine().toLowerCase();
+			choice = Menu.scan.nextLine().toLowerCase();
 			
 			switch(choice)
 			{

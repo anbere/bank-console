@@ -24,7 +24,7 @@ public class UserMenu implements Menu {
 			System.out.println("3: View pending account applications");
 			System.out.println("4: Exit");
 			
-			choice = UserMenu.scn.nextLine();
+			choice = UserMenu.scan.nextLine();
 			
 			switch (choice) {
 			case "1":

@@ -20,7 +20,7 @@ public class RegistrationMenu implements Menu {
 			System.out.println("\nType /'1/' to Cancel.");
 			System.out.println("\nPlease enter you desired username: ");
 			
-			username = RegistrationMenu.scn.nextLine();
+			username = RegistrationMenu.scan.nextLine();
 			
 			if(username.equals("1"))
 			{
@@ -30,7 +30,7 @@ public class RegistrationMenu implements Menu {
 			System.out.println("\nType /'1/' to Cancel.");
 			System.out.println("\nPlease enter a password: ");
 			
-			password = RegistrationMenu.scn.nextLine();
+			password = RegistrationMenu.scan.nextLine();
 			
 			if(password.equals("1"))
 			{

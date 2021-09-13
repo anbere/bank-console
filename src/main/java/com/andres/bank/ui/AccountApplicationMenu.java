@@ -1,7 +1,10 @@
 package com.andres.bank.ui;
 
+import java.sql.SQLException;
+
 import com.andres.bank.exceptions.ProcessingApplicationException;
 import com.andres.bank.service.AccountApplicationService;
+import com.andres.bank.util.ConnectionUtil;
 
 public class AccountApplicationMenu implements Menu {
 
@@ -28,7 +31,7 @@ public class AccountApplicationMenu implements Menu {
 			System.out.println("2: Savings Account");
 			System.out.println("3: Exit");
 			
-			choice = AccountApplicationMenu.scn.nextLine();
+			choice = AccountApplicationMenu.scan.nextLine();
 			
 			switch (choice) {
 			case "1":
@@ -37,7 +40,7 @@ public class AccountApplicationMenu implements Menu {
 				do {
 					System.out.println("1: Cancel");
 					System.out.println("Enter initial deposit amount: ");
-					initialBalance = AccountApplicationMenu.scn.nextLine();
+					initialBalance = AccountApplicationMenu.scan.nextLine();
 
 					if (initialBalance.equals("1"))
 					{
@@ -52,6 +55,12 @@ public class AccountApplicationMenu implements Menu {
 						System.out.println(e.getMessage());
 						//successfullyApplied = true;
 						break;
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				
 				} while (!successfullyApplied);
@@ -68,7 +77,7 @@ public class AccountApplicationMenu implements Menu {
 				do {
 					System.out.println("1: Cancel");
 					System.out.println("Enter initial deposit ammount: ");
-					initialBalance = AccountApplicationMenu.scn.nextLine();
+					initialBalance = AccountApplicationMenu.scan.nextLine();
 
 					if (initialBalance.equals("1"))
 					{
@@ -83,6 +92,12 @@ public class AccountApplicationMenu implements Menu {
 						System.out.println(e.getMessage());
 						//successfullyApplied = true;
 						break;
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
 				} while (!successfullyApplied);

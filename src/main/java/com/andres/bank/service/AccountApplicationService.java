@@ -1,10 +1,14 @@
 package com.andres.bank.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import com.andres.bank.dao.AccountsDAO;
 import com.andres.bank.dao.AccountsDAOImpl;
 import com.andres.bank.dao.BankUserDAO;
 import com.andres.bank.dao.BankUserDAOImpl;
 import com.andres.bank.exceptions.ProcessingApplicationException;
+import com.andres.bank.util.ConnectionUtil;
 
 public class AccountApplicationService {
 
@@ -17,18 +21,12 @@ public class AccountApplicationService {
 		this.bankUserDAO = new BankUserDAOImpl();
 	}
 	
-	public boolean applyForNewAccount(String accountType, double initialBalance, String currentUser) throws ProcessingApplicationException
+	public boolean applyForNewAccount(String accountType, double initialBalance, String currentUser) throws SQLException, ProcessingApplicationException
 	{
-		if(initialBalance < 500)
+		try(Connection con = ConnectionUtil.getConnection())
 		{
-			System.out.println("Must apply with initial deposit of at least $500. Try again.");
-			return false;
-		}else if(initialBalance > 500000)
-		{
-			System.out.println("Must apply with initial deposit no more than $500,000. Try again.");
-			return false;
+			return accountsDAO.applyForNewAccount(accountType, initialBalance, currentUser, con);
 		}
-		return accountsDAO.applyForNewAccount(accountType, initialBalance, currentUser);
 	}
 	
 }

@@ -1,7 +1,5 @@
 package com.andres.bank.app;
 
-import java.io.IOException;
-
 import com.andres.bank.ui.MainMenu;
 import com.andres.bank.ui.Menu;
 

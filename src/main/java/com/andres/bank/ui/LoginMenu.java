@@ -25,7 +25,7 @@ public class LoginMenu implements Menu{
 			System.out.println("\nType \'1\' to exit.");
 			System.out.println("\nPlease enter your username: ");
 			
-			username = LoginMenu.scn.nextLine();
+			username = LoginMenu.scan.nextLine();
 			
 			if(username.equals("1"))
 			{
@@ -42,7 +42,7 @@ public class LoginMenu implements Menu{
 					System.out.println("\nType \'1\' to exit.");
 					System.out.println("\nPlease enter your password: ");
 					
-					password = LoginMenu.scn.nextLine();
+					password = LoginMenu.scan.nextLine();
 					
 					if(password.equals("1"))
 					{

@@ -1,24 +1,44 @@
 package com.andres.bank.model;
 
-import java.io.Serializable;
+public class Account{
 
-public class Account implements Serializable{
-
+	private int    applicationNumber;
+	private int    applicationStatus;
+	private int    accountNumber;
 	private String accountOwner;
 	private String accountType; //Checking or Savings
 	private double balance;
-	int status; // 0: pending, 1: active
+	private String accountStatus; // 0: pending, 1: active, 3: closed
 	
-	public Account(String type, double initialBalance, String username)
+	public Account(String status, int accNumber, String type, double initialBalance, String username)
 	{
+		accountNumber = accNumber;
 		accountOwner = username;
 		accountType = type;
 		balance = initialBalance;
-		status = 0;
+		accountStatus = status;
+	}
+	
+	public Account(String status, String type, double initialBalance, String username)
+	{
+		accountStatus = status;
+		accountOwner = username;
+		accountType = type;
+		balance = initialBalance;
+	}
+	
+	public String getAccountStatus() {
+		return accountStatus;
 	}
 
-	
-	
+
+
+	public void setAccountStatus(String accountStatus) {
+		this.accountStatus = accountStatus;
+	}
+
+
+
 	public String getAccountOwner() {
 		return accountOwner;
 	}
@@ -53,24 +73,19 @@ public class Account implements Serializable{
 		this.balance = balance;
 	}
 
-
-
-	public int getStatus() {
-		return status;
-	}
-
-
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-
-
 	@Override
 	public String toString() {
-		return "\nAccount type: " + accountType + "\nCurrent Balance: " + balance;
+
+			if (this.accountStatus.equals("PENDING")) { // PENDING ACCOUNT
+				return "[#" + applicationNumber + " | " + accountType + " | Pending Initial Balance: " + balance + " | Application Status:"
+						+ applicationStatus + "]";
+			} else if (this.accountStatus.equals("ACTIVE")) { // ACTIVE ACCOUNT
+				return "[Account: " + accountNumber + " | " + accountType + " | Balance: " + balance + "]";
+			} else { // CLOSED ACCOUNT
+				return "[Account: " + accountNumber + " | " + accountType + "]";
+			}
+		
+		
 	}
-	
-	
+
 }
