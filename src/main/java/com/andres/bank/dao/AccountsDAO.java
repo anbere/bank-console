@@ -14,8 +14,10 @@ public interface AccountsDAO {
 	public ArrayList<Account> getActiveAccounts(String username, Connection con) throws SQLException;
 	
 	public ArrayList<Account> getPendingAccounts(String username, Connection con) throws SQLException;
+	
+	public Account getAccountByNumber(int accountNumber, String username, Connection con) throws SQLException;
 
-	public void deposit(double depositAmount, String accKey);
+	public void deposit(int accountNumber, double depositAmount, Connection con) throws SQLException;
 	
 	public void withdraw(double depositAmount, String accKey);
 

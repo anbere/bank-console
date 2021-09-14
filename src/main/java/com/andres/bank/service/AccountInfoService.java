@@ -25,7 +25,7 @@ public class AccountInfoService {
 
 		try(Connection con = ConnectionUtil.getConnection())
 		{
-			userAccounts = accountsDAO.getPendingAccounts(username, con);
+			userAccounts = accountsDAO.getActiveAccounts(username, con);
 		}
 		
 		
@@ -36,8 +36,22 @@ public class AccountInfoService {
 		{
 			return userAccounts;
 		}
+	}
+	
+	public Account getAccountByNumber(String accountNumber, String username) throws SQLException, NoAccountFoundException
+	{
+		Account account = null;
 		
+		try(Connection con = ConnectionUtil.getConnection())
+		{
+			account = accountsDAO.getAccountByNumber(Integer.parseInt(accountNumber), username, con);
+		}
 		
+		if(account == null) {
+			throw new NoAccountFoundException("No account found with this number");
+		}	
+		
+		return account;
 	}
 	
 

@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import com.andres.bank.exceptions.ProcessingApplicationException;
 import com.andres.bank.service.AccountApplicationService;
-import com.andres.bank.util.ConnectionUtil;
 
 public class AccountApplicationMenu implements Menu {
 

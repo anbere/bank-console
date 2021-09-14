@@ -49,72 +49,70 @@ public class AccountMenu implements Menu {
 			}
 			
 			System.out.println("Please choose an account for more options: ");
-			
 			choice = scan.nextLine();
 			
-			System.out.println("\nWhat would you like to do?");
-			System.out.println("\n1: Deposit");
-			System.out.println("2: Withdraw");
-			System.out.println("3: Account Transfers");
-			System.out.println("4: Exit");
+			try 
+			{
+				Account chosenAccount = accountInfoService.getAccountByNumber(choice, currentUser);
+				
+				if(chosenAccount != null)
+				{
+					do
+					{
+						choice = "4";
+						System.out.println("\nFor account: " + chosenAccount + ", make a choice.");
+						
+						System.out.println("\n1: Deposit");
+						System.out.println("2: Withdraw");
+						System.out.println("3: Transfer");
+						System.out.println("e: Exit");
 
-			choice = AccountMenu.scan.nextLine();
-
-			if (choice.equals("4")) {
-				break;
+						choice = Menu.scan.nextLine();
+						
+						switch(choice)
+						{
+						
+						case "1":
+							Double depositAmount;
+							System.out.println("Enter an amount to deposit, or 'e' to exit");
+							depositAmount = Double.parseDouble(scan.nextLine());
+							
+							if(depositAmount.equals("e"))
+							{
+								break;
+							}
+							
+							try
+							{
+								accountActionsService.deposit(chosenAccount, depositAmount);
+								System.out.println("Deposit successful.");
+							}catch(Exception e)
+							{
+								System.out.println(e.getMessage());
+							}
+							
+							break;
+						case "2":
+							break;
+						case "3":
+							break;
+						case "e":
+							break;
+						default:
+							System.out.println("Invalid choice, please choose again.");
+							choice = "4";
+						}
+						
+					}while(choice.equals("4"));
+				}
+				
+			} catch (SQLException | NoAccountFoundException e) 
+			{
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
 			}
+			
 
-			switch (choice) {
-			case "1":
-				String depositAmount;
-				System.out.println("Enter the amount you would like to deposit, or enter E to exit.");
-
-				depositAmount = AccountMenu.scan.nextLine();
-				double deposit = Double.parseDouble(depositAmount);
-
-				if (depositAmount.equals("e") || depositAmount.equals("E")) {
-					break;
-				}
-
-				try {
-					accountActionsService.deposit(userAccounts.get(0), deposit);
-					System.out.println("Deposit of " + depositAmount + "succesful.");
-				} catch (BlankEntryException e) {
-					System.out.println(e.getMessage());
-				} catch (InvalidInputException e) {
-					System.out.println(e.getMessage());
-				}
-				choice = "0";
-				break;
-			case "2":
-				String withdrawAmount;
-				System.out.println("Enter the amount you would like to withdraw, or enter E to exit.");
-
-				withdrawAmount = AccountMenu.scan.nextLine();
-				double withdraw = Double.parseDouble(withdrawAmount);
-
-				if (withdrawAmount.equals("e") || withdrawAmount.equals("E")) {
-					break;
-				}
-
-				try {
-					accountActionsService.withdraw(userAccounts.get(0), withdraw);
-					System.out.println("Your withdrawal of: " + withdrawAmount + " was successful.");
-				} catch (BlankEntryException e) {
-					System.out.println(e.getMessage());
-				} catch (InvalidInputException e) {
-					System.out.println(e.getMessage());
-				}
-
-				choice = "0";
-
-				break;
-			case "4":
-				break;
-			default:
-				System.out.println("Invalid choice, choose again.");
-
-			}
 
 		} while (choice.equals("0"));
 
