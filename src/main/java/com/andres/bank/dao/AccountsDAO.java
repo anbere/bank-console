@@ -17,6 +17,8 @@ public interface AccountsDAO {
 	
 	public ArrayList<Account> getAccountsByUsername(String username, Connection con) throws SQLException;
 	
+	public Account getApplicationByNumber(int applicationNumber, Connection con) throws SQLException;
+	
 	public Account getAccountByNumber(int accountNumber, Connection con) throws SQLException;
 
 	public void deposit(int accountNumber, double depositAmount, Connection con) throws SQLException;
@@ -24,6 +26,7 @@ public interface AccountsDAO {
 	public void withdraw(int accountnumber, double withdrawAmount, Connection con) throws SQLException;
 	
 	public void updateAccountStatus(int accountNumber, String decision, Connection con) throws SQLException;
+
 
 	
 }

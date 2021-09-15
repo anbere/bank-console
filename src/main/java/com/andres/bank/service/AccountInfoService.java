@@ -38,6 +38,43 @@ public class AccountInfoService {
 		}
 	}
 	
+	public ArrayList<Account> getPendingAccounts(String username) throws NoAccountFoundException, SQLException
+	{
+		ArrayList<Account> userAccounts = new ArrayList<>();
+		
+
+		try(Connection con = ConnectionUtil.getConnection())
+		{
+			userAccounts = accountsDAO.getPendingAccounts(username, con);
+		}
+		
+		
+		if(userAccounts.size() == 0)
+		{
+			throw new NoAccountFoundException("No pending accounts found");
+		}else
+		{
+			return userAccounts;
+		}
+	}
+	
+	public Account getApplicationByNumber(String applicationNumber) throws SQLException, NoAccountFoundException
+	{
+		Account account = null;
+		
+		try(Connection con = ConnectionUtil.getConnection())
+		{
+			account = accountsDAO.getApplicationByNumber(Integer.parseInt(applicationNumber), con);
+		}
+		
+		if(account == null)
+		{
+			throw new NoAccountFoundException("No account found with this application number.");
+		}
+		
+		return account;
+	}
+	
 	public Account getAccountByNumber(String accountNumber) throws SQLException, NoAccountFoundException
 	{
 		Account account = null;

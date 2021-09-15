@@ -69,13 +69,14 @@ public class AccountsDAOImpl implements AccountsDAO {
 
 		ResultSet rs = ps.executeQuery();
 
-		while (rs.next()) {
+		while(rs.next()) {
+			int application_number = rs.getInt("application_number");
 			String accountOwner = rs.getString("account_owner");
 			String accountType = rs.getString("account_type");
 			double balance = rs.getDouble("initial_balance");
 			String status = rs.getString("status");
 
-			accounts.add(new Account(accountOwner, accountType, balance, status));
+			accounts.add(new Account(accountOwner, application_number, accountType, balance, status));
 		}
 
 		return accounts;
@@ -119,6 +120,31 @@ public class AccountsDAOImpl implements AccountsDAO {
 		}
 
 		return accounts;
+	}
+	
+	@Override
+	public Account getApplicationByNumber(int applicationNumber, Connection con) throws SQLException {
+
+		Account account = null;
+
+		String sql = "SELECT * FROM bank_console.pending_accounts WHERE application_number = ?;";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, applicationNumber);
+
+		ResultSet rs = ps.executeQuery();
+		
+		if(rs.next())
+		{
+			String accountOwner = rs.getString("account_owner");
+			int appNumber = rs.getInt("application_number");
+			String accountType = rs.getString("account_type");
+			double balance = rs.getDouble("initial_balance");
+			String status = rs.getString("status");
+			
+			account = new Account(accountOwner, appNumber, accountType, balance, status);
+		}
+		
+		return account;
 	}
 
 	@Override
@@ -202,23 +228,23 @@ public class AccountsDAOImpl implements AccountsDAO {
 
 	@Override
 	public void updateAccountStatus(int applicationNumber, String decision, Connection con) throws SQLException {
-		String sql = "UPDATE bank_console.pending_accounts SET status = ? WHERE application_number = ?;";
+//		String sql = "UPDATE bank_console.pending_accounts SET status = ? WHERE application_number = ?;";
+//
+//		PreparedStatement ps = con.prepareStatement(sql);
+//
+//		ps.setString(1, decision);
+//		ps.setInt(2, applicationNumber);
+//
+//		int count = ps.executeUpdate();
+//
+//		if (count != 1) {
+//			throw new SQLException("Failed to update status of pending account.");
+//		}
 
-		PreparedStatement ps = con.prepareStatement(sql);
+		if (decision.equals("ACTIVE")) {
+			String sql = "SELECT account_owner, account_type, initial_balance FROM bank_console.pending_accounts WHERE application_number = ?;";
 
-		ps.setString(1, decision);
-		ps.setInt(2, applicationNumber);
-
-		int count = ps.executeUpdate();
-
-		if (count != 1) {
-			throw new SQLException("Failed to update status of pending account.");
-		}
-
-		if (decision.equals("APPROVED")) {
-			sql = "SELECT account_owner, account_type, initial_balance_cents FROM bank_app_data.pending_accounts WHERE application_number = ?;";
-
-			ps = con.prepareStatement(sql);
+			PreparedStatement ps = con.prepareStatement(sql);
 
 			ps.setInt(1, applicationNumber);
 
@@ -237,26 +263,24 @@ public class AccountsDAOImpl implements AccountsDAO {
 				ps.setInt(4, rs.getInt("initial_balance"));
 				ps.setString(5, "ACTIVE");
 
-				count = ps.executeUpdate();
+				int count = ps.executeUpdate();
+				
 				if (count != 1) {
 					throw new SQLException("Failed to create new active account.");
 				}
 
 			}
-		} else {
-			sql = "DELETE FROM bank_console.pending_accounts WHERE application_number = ?;";
+		} 
+			String sql = "DELETE FROM bank_console.pending_accounts WHERE application_number = ?;";
 
-			ps = con.prepareStatement(sql);
+			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, applicationNumber);
 
-			int count2 = ps.executeUpdate();
+			int count = ps.executeUpdate();
 
-			if (count2 != 1) {
-				throw new SQLException("Failed to delete Denied application");
+			if (count != 1) {
+				throw new SQLException("Failed to delete pending application");
 			}
 
 		}
-
-	}
-
 }

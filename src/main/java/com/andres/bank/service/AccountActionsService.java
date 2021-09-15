@@ -13,12 +13,18 @@ public class AccountActionsService {
 
 	public AccountsDAO accountsDAO = new AccountsDAOImpl();
 	
-	public void deposit(Account chosenAccount, String depositAmount) throws SQLException
+	public void deposit(Account chosenAccount, String depositAmount) throws SQLException, InvalidInputException
 	{
+		double dep = Double.parseDouble(depositAmount);
+		
+		if(dep <= 0)
+		{
+			throw new InvalidInputException("Must enter an amount greater than 0.");
+		}
 		
 		try(Connection con = ConnectionUtil.getConnection())
 		{
-			accountsDAO.deposit(chosenAccount.getAccountNumber(), Double.parseDouble(depositAmount), con);			
+			accountsDAO.deposit(chosenAccount.getAccountNumber(), dep, con);			
 		}
 		
 	}
@@ -27,6 +33,8 @@ public class AccountActionsService {
 	{
 		try(Connection con = ConnectionUtil.getConnection())
 		{
+			double withdraw = Double.parseDouble(withdrawAmount);
+			
 			double currentBalance = accountBeingAccessed.getBalance();
 			
 			if(currentBalance - Double.parseDouble(withdrawAmount) < 0)
@@ -48,7 +56,6 @@ public class AccountActionsService {
 		try(Connection con = ConnectionUtil.getConnection())
 		{
 			accountsDAO.updateAccountStatus(applicationNumber, decision, con);
-			System.out.println("Account successfully " + decision + ".");
 		}
 	}
 	

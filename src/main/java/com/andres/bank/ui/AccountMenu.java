@@ -3,6 +3,7 @@ package com.andres.bank.ui;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.andres.bank.exceptions.InvalidInputException;
 import com.andres.bank.exceptions.NoAccountFoundException;
 import com.andres.bank.model.Account;
 import com.andres.bank.service.AccountActionsService;
@@ -73,7 +74,7 @@ public class AccountMenu implements Menu {
 						case "1":
 							
 							String depositAmount;
-							System.out.println("Enter an amount to deposit, or '-1' to exit");
+							System.out.println("Enter an amount to deposit, or 'e' to exit");
 							depositAmount = scan.nextLine();
 
 							if (depositAmount.equals("e")) {
@@ -83,7 +84,12 @@ public class AccountMenu implements Menu {
 							try {
 								accountActionsService.deposit(chosenAccount, depositAmount);
 								System.out.println("Deposit of " + depositAmount + " successful.");
-							} catch (Exception e) {
+							} catch (SQLException e) {
+								System.out.println(e.getMessage());
+							} catch (NumberFormatException nfe)
+							{
+								System.out.println("Not a valid account number, numeric values only.");
+							} catch (InvalidInputException e) {
 								System.out.println(e.getMessage());
 							}
 
@@ -101,8 +107,13 @@ public class AccountMenu implements Menu {
 							try {
 								accountActionsService.withdraw(chosenAccount, withdrawAmount);
 								System.out.println("Withdrawal of " + withdrawAmount + " successful.");
-							} catch (Exception e) {
+							} catch (SQLException e) {
 								System.out.println(e.getMessage());
+							} catch (InvalidInputException e) {
+								System.out.println(e.getMessage());
+							} catch (NumberFormatException nfe)
+							{
+								System.out.println("Not a valid account number, numeric values only.");
 							}
 							break;
 							

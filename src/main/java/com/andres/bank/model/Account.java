@@ -1,5 +1,7 @@
 package com.andres.bank.model;
 
+import java.text.NumberFormat;
+
 public class Account{
 
 	private int    applicationNumber; //Pending Account
@@ -27,13 +29,13 @@ public class Account{
 		accountStatus = status;
 	}
 	
-	public Account(String username, String type, double initialBalance, String status) // Pending Account Constructor
-	{
-		accountOwner = username;
-		accountType = type;
-		balance = initialBalance;
-		accountStatus = status;
-	}
+//	public Account(String username, String type, double initialBalance, String status) // Pending Account Constructor
+//	{
+//		accountOwner = username;
+//		accountType = type;
+//		balance = initialBalance;
+//		accountStatus = status;
+//	}
 	
 	
 	public int getApplicationNumber() {
@@ -87,11 +89,13 @@ public class Account{
 	@Override
 	public String toString() {
 
+		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+		
 			if (this.accountStatus.equals("PENDING")) { // PENDING ACCOUNT
-				return "[Application #:" + applicationNumber + " | " + accountType + " | Pending Initial Balance: " + balance + " | Application Status:"
+				return "[Application #: " + applicationNumber + " | " + accountType + " | Pending Initial Balance: " + formatter.format(balance) + " | Application Status:"
 						+ accountStatus + "]";
 			} else if (this.accountStatus.equals("ACTIVE")) { // ACTIVE ACCOUNT
-				return "[Account #: " + accountNumber + " | " + accountType + " | Balance: " + balance + " | Account Status: " + accountStatus + "]";
+				return "[Account #: " + accountNumber + " | " + accountType + " | Balance: " + formatter.format(balance) + " | Account Status: " + accountStatus + "]";
 			} else { // CLOSED ACCOUNT
 				return "[Account #: " + accountNumber + " | " + accountType + " | Account Status: " + accountStatus + "]";
 			}
