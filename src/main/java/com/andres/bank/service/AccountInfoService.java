@@ -31,7 +31,7 @@ public class AccountInfoService {
 		
 		if(userAccounts.size() == 0)
 		{
-			throw new NoAccountFoundException("No active accounts found");
+			throw new NoAccountFoundException("No active accounts found for: " + username);
 		}else
 		{
 			return userAccounts;
@@ -51,7 +51,7 @@ public class AccountInfoService {
 		
 		if(userAccounts.size() == 0)
 		{
-			throw new NoAccountFoundException("No pending accounts found");
+			throw new NoAccountFoundException("No pending accounts found for: " + username);
 		}else
 		{
 			return userAccounts;
@@ -69,7 +69,7 @@ public class AccountInfoService {
 		
 		if(account == null)
 		{
-			throw new NoAccountFoundException("No account found with this application number.");
+			throw new NoAccountFoundException("No account found with application number: " + applicationNumber);
 		}
 		
 		return account;
@@ -85,7 +85,7 @@ public class AccountInfoService {
 		}
 		
 		if(account == null) {
-			throw new NoAccountFoundException("No account found with this number");
+			throw new NoAccountFoundException("No account found with account number: " + accountNumber);
 		}	
 		
 		return account;
@@ -101,7 +101,7 @@ public class AccountInfoService {
 		}
 		
 		if(accounts.size() == 0) {
-			throw new NoAccountFoundException("No accounts found under this user.");
+			throw new NoAccountFoundException("No accounts found under user: " + username);
 		}
 		else {
 			return accounts;

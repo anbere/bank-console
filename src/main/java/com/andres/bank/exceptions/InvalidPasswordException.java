@@ -7,4 +7,9 @@ public class InvalidPasswordException extends Exception{
 		super();
 	}
 	
+	public InvalidPasswordException(String message)
+	{
+		super(message);
+	}
+	
 }

@@ -2,6 +2,7 @@ package com.andres.bank.ui;
 
 import java.sql.SQLException;
 
+import com.andres.bank.exceptions.InvalidInputException;
 import com.andres.bank.exceptions.ProcessingApplicationException;
 import com.andres.bank.service.AccountApplicationService;
 
@@ -9,10 +10,11 @@ public class AccountApplicationMenu implements Menu {
 
 	String currentUser;
 	
-	AccountApplicationService aps = new AccountApplicationService();
+	AccountApplicationService aps;
 
 	public AccountApplicationMenu(String username) {
 		currentUser = username;
+		aps = new AccountApplicationService();
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class AccountApplicationMenu implements Menu {
 				accountType = "CHECKING";
 
 				do {
-					System.out.println("1: Cancel");
+					System.out.println("\n1: Cancel");
 					System.out.println("Enter initial deposit amount: ");
 					initialBalance = AccountApplicationMenu.scan.nextLine();
 
@@ -52,14 +54,14 @@ public class AccountApplicationMenu implements Menu {
 					}catch(ProcessingApplicationException e)
 					{
 						System.out.println(e.getMessage());
-						//successfullyApplied = true;
 						break;
 					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("Enter numeric values only.");
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
+					} catch (InvalidInputException e)
+					{
+						System.out.println(e.getMessage());
 					}
 				
 				} while (!successfullyApplied);
@@ -74,7 +76,7 @@ public class AccountApplicationMenu implements Menu {
 				accountType = "SAVING";
 
 				do {
-					System.out.println("1: Cancel");
+					System.out.println("\n1: Cancel");
 					System.out.println("Enter initial deposit ammount: ");
 					initialBalance = AccountApplicationMenu.scan.nextLine();
 
@@ -89,14 +91,14 @@ public class AccountApplicationMenu implements Menu {
 					}catch(ProcessingApplicationException e)
 					{
 						System.out.println(e.getMessage());
-						//successfullyApplied = true;
 						break;
 					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("Enter numeric values only.");
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
+					} catch (InvalidInputException e)
+					{
+						System.out.println(e.getMessage());
 					}
 
 				} while (!successfullyApplied);

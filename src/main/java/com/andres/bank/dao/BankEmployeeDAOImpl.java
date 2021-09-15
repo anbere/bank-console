@@ -68,4 +68,24 @@ public class BankEmployeeDAOImpl implements BankEmployeeDAO
 		return isAdmin;
 	}
 
+	@Override
+	public void createEmployee(int employeeID, String password, boolean isAdmin, Connection con) throws SQLException {
+		
+		String sql = "INSERT INTO bank_console.employees(employee_id, password, is_admin) VALUES (?,?,?)";
+
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		ps.setInt(1, employeeID);
+		ps.setString(2, password);
+		ps.setBoolean(3, isAdmin);
+		
+		int count = ps.executeUpdate();
+		
+		if(count != 1)
+		{
+			throw new SQLException("Could not create new employee in database.");
+		}
+						
+	}
+
 }

@@ -7,6 +7,7 @@ import com.andres.bank.exceptions.NoAccountFoundException;
 import com.andres.bank.model.Account;
 import com.andres.bank.service.AccountActionsService;
 import com.andres.bank.service.AccountInfoService;
+import com.andres.bank.service.TransferService;
 import com.andres.bank.service.UserService;
 
 public class AdminMainMenu implements Menu {
@@ -14,11 +15,13 @@ public class AdminMainMenu implements Menu {
 	UserService userService;
 	AccountInfoService accountInfoService;
 	AccountActionsService accountActionsService;
+	TransferService transferService;
 
 	public AdminMainMenu() {
 		userService = new UserService();
 		accountInfoService = new AccountInfoService();
 		accountActionsService = new AccountActionsService();
+		transferService = new TransferService();
 	}
 
 	@Override
@@ -26,11 +29,13 @@ public class AdminMainMenu implements Menu {
 
 		String choice = "0";
 		String decision = "0";
-		System.out.println("\n----- Employee Main Menu -----");
+		System.out.println("\n----- Admin Main Menu -----");
 
 		do {
 			System.out.println("\n1: View customer accounts.");
 			System.out.println("2: Approve or deny pending accounts.");
+			System.out.println("3: Withdraw, deposit or transfer from user accounts.");	
+			System.out.println("4: Add new employee.");	
 			System.out.println("e: Exit");
 
 			choice = scan.nextLine();
@@ -114,6 +119,16 @@ public class AdminMainMenu implements Menu {
 					}
 				} while (decision.equals("0"));
 
+				break;
+			case "3":
+				Menu adminTransferMenu = new AdminTransferMenu();
+				adminTransferMenu.display();
+				choice = "0";
+				break;
+			case "4":
+				Menu addEmployeeMenu = new AddEmployeeMenu();
+				addEmployeeMenu.display();
+				choice = "0";
 				break;
 			case "e":
 				break;

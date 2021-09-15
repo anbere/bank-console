@@ -48,7 +48,7 @@ public class AccountMenu implements Menu {
 				System.out.println(account);
 			}
 
-			System.out.println("\nPlease choose an account for more options, or 'e' to exit. ");
+			System.out.println("\nPlease enter an account number for more options, or 'e' to exit. ");
 			choice = scan.nextLine();
 
 			if(choice.equals("e"))
@@ -56,7 +56,12 @@ public class AccountMenu implements Menu {
 			
 			try {
 				Account chosenAccount = accountInfoService.getAccountByNumber(choice);
-
+				if(!chosenAccount.getAccountOwner().equals(currentUser))
+				{
+					System.out.println("This is not one of your accounts.");
+					choice = "0";
+					break;
+				}
 				if (chosenAccount != null) {
 					do {
 						choice = "4";
@@ -77,7 +82,7 @@ public class AccountMenu implements Menu {
 							System.out.println("Enter an amount to deposit, or 'e' to exit");
 							depositAmount = scan.nextLine();
 
-							if (depositAmount.equals("e")) {
+							if (depositAmount.equalsIgnoreCase("e")) {
 								break;
 							}
 
@@ -100,7 +105,7 @@ public class AccountMenu implements Menu {
 							System.out.println("Enter an amount to withdraw, or 'e' to exit");
 							withdrawAmount = scan.nextLine();
 
-							if (withdrawAmount.equals("e")) {
+							if (withdrawAmount.equalsIgnoreCase("e")) {
 								break;
 							}
 
@@ -119,9 +124,13 @@ public class AccountMenu implements Menu {
 							
 						case "3":
 							String transferAccountNumber;
-							System.out.println("Enter account number you wish to transfer to.");
-							
+							System.out.println("Enter account number you wish to transfer to, or 'e' to exit.");
 							transferAccountNumber = scan.nextLine();
+							
+							if(transferAccountNumber.equalsIgnoreCase("e"))
+							{
+								break;
+							}
 
 							try {
 								Account receivingAccount = accountInfoService.getAccountByNumber(transferAccountNumber);
@@ -134,7 +143,6 @@ public class AccountMenu implements Menu {
 							{
 								System.out.println(e.getMessage());
 							}
-							
 							break;
 						case "e":
 							break;

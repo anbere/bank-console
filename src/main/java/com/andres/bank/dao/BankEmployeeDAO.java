@@ -10,4 +10,6 @@ public interface BankEmployeeDAO {
 	public boolean checkPassword(int employeeID, String password, Connection con) throws SQLException;
 	
 	public boolean checkAdmin(int employeeID, Connection con) throws SQLException;
+
+	public void createEmployee(int employeeID, String password, boolean isAdmin, Connection con) throws SQLException;
 }

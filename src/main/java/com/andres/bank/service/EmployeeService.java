@@ -7,6 +7,7 @@ import com.andres.bank.dao.BankEmployeeDAO;
 import com.andres.bank.dao.BankEmployeeDAOImpl;
 import com.andres.bank.exceptions.IncorrectPasswordException;
 import com.andres.bank.exceptions.InvalidInputException;
+import com.andres.bank.exceptions.InvalidPasswordException;
 import com.andres.bank.exceptions.UserNotFoundException;
 import com.andres.bank.util.ConnectionUtil;
 
@@ -53,6 +54,20 @@ public class EmployeeService {
 		try (Connection con = ConnectionUtil.getConnection())
 		{
 			return bankEmployeeDAO.checkAdmin(employeeID, con);
+		}
+	}
+	
+	public void createEmployee(int employeeID, String password, boolean isAdmin) throws SQLException, InvalidPasswordException
+	{
+		try(Connection con = ConnectionUtil.getConnection())
+		{
+			if(password.matches("^\\s*$") || password == null) {
+				throw new InvalidPasswordException("Not a valid password.");
+			}else if(password.length() < 5)
+			{
+				throw new InvalidPasswordException("Not a valid password. Must be at least 5 characters.");
+			}
+			bankEmployeeDAO.createEmployee(employeeID, password, isAdmin, con);
 		}
 	}
 	
