@@ -2,13 +2,12 @@ package com.andres.bank.model;
 
 public class Account{
 
-	private int    applicationNumber;
-	private int    accountNumber;
+	private int    applicationNumber; //Pending Account
+	private int    accountNumber;     //Active Account
 	private String accountOwner;
-	private String accountType; //Checking or Savings
+	private String accountType;       //Checking or Savings
 	private double balance;
-	private String accountStatus; // 0: pending, 1: active, 3: closed
-	private String applicationStatus;
+	private String accountStatus;     //ACTIVE, PENDING, CLOSED
 	
 	public Account(int accNumber, String username, String type, double balance, String status) // Active Account Constructor
 	{
@@ -19,6 +18,15 @@ public class Account{
 		accountStatus = status;
 	}
 	
+	public Account(String username, int appNumber, String type, double initialBalance, String status) // Pending Account Constructor
+	{
+		applicationNumber = appNumber;
+		accountOwner = username;
+		accountType = type;
+		balance = initialBalance;
+		accountStatus = status;
+	}
+	
 	public Account(String username, String type, double initialBalance, String status) // Pending Account Constructor
 	{
 		accountOwner = username;
@@ -26,7 +34,6 @@ public class Account{
 		balance = initialBalance;
 		accountStatus = status;
 	}
-	
 	
 	
 	public int getApplicationNumber() {
@@ -77,24 +84,16 @@ public class Account{
 		this.accountStatus = accountStatus;
 	}
 
-	public String getApplicationStatus() {
-		return applicationStatus;
-	}
-
-	public void setApplicationStatus(String applicationStatus) {
-		this.applicationStatus = applicationStatus;
-	}
-
 	@Override
 	public String toString() {
 
 			if (this.accountStatus.equals("PENDING")) { // PENDING ACCOUNT
-				return "[#" + applicationNumber + " | " + accountType + " | Pending Initial Balance: " + balance + " | Application Status:"
-						+ applicationStatus + "]";
+				return "[Application #:" + applicationNumber + " | " + accountType + " | Pending Initial Balance: " + balance + " | Application Status:"
+						+ accountStatus + "]";
 			} else if (this.accountStatus.equals("ACTIVE")) { // ACTIVE ACCOUNT
-				return "[Account: " + accountNumber + " | " + accountType + " | Balance: " + balance + "]";
+				return "[Account #: " + accountNumber + " | " + accountType + " | Balance: " + balance + " | Account Status: " + accountStatus + "]";
 			} else { // CLOSED ACCOUNT
-				return "[Account: " + accountNumber + " | " + accountType + "]";
+				return "[Account #: " + accountNumber + " | " + accountType + " | Account Status: " + accountStatus + "]";
 			}
 		
 		

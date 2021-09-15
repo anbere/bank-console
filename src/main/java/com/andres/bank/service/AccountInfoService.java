@@ -38,13 +38,13 @@ public class AccountInfoService {
 		}
 	}
 	
-	public Account getAccountByNumber(String accountNumber, String username) throws SQLException, NoAccountFoundException
+	public Account getAccountByNumber(String accountNumber) throws SQLException, NoAccountFoundException
 	{
 		Account account = null;
 		
 		try(Connection con = ConnectionUtil.getConnection())
 		{
-			account = accountsDAO.getAccountByNumber(Integer.parseInt(accountNumber), username, con);
+			account = accountsDAO.getAccountByNumber(Integer.parseInt(accountNumber), con);
 		}
 		
 		if(account == null) {
@@ -53,6 +53,22 @@ public class AccountInfoService {
 		
 		return account;
 	}
-	
 
+	public ArrayList<Account> getAccountsByUsername(String username) throws SQLException, NoAccountFoundException {
+		
+		ArrayList<Account> accounts = new ArrayList<>();
+		
+		try(Connection con = ConnectionUtil.getConnection())
+		{
+			accounts = accountsDAO.getAccountsByUsername(username, con);
+		}
+		
+		if(accounts.size() == 0) {
+			throw new NoAccountFoundException("No accounts found under this user.");
+		}
+		else {
+			return accounts;
+		}
+	}
+	
 }

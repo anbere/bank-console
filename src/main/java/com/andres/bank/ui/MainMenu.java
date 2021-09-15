@@ -32,7 +32,7 @@ public class MainMenu implements Menu {
 				choice = "0";
 				break;
 			case "3":
-				Menu employeeAdminMenu = new EmployeeAdminMenu();
+				Menu employeeAdminMenu = new EmployeeAdminLoginMenu();
 				employeeAdminMenu.display();
 				choice = "0";
 				break;

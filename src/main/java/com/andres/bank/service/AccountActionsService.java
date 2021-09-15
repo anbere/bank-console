@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import com.andres.bank.dao.AccountsDAO;
 import com.andres.bank.dao.AccountsDAOImpl;
-import com.andres.bank.exceptions.BlankEntryException;
 import com.andres.bank.exceptions.InvalidInputException;
 import com.andres.bank.model.Account;
 import com.andres.bank.util.ConnectionUtil;
@@ -14,33 +13,43 @@ public class AccountActionsService {
 
 	public AccountsDAO accountsDAO = new AccountsDAOImpl();
 	
-	public void deposit(Account chosenAccount, double depositAmount) throws SQLException
+	public void deposit(Account chosenAccount, String depositAmount) throws SQLException
 	{
 		
 		try(Connection con = ConnectionUtil.getConnection())
 		{
-			accountsDAO.deposit(chosenAccount.getAccountNumber(), depositAmount, con);			
+			accountsDAO.deposit(chosenAccount.getAccountNumber(), Double.parseDouble(depositAmount), con);			
 		}
 		
 	}
 	
-	public void withdraw(Account accountBeingAccessed, double withdrawAmount) throws BlankEntryException, InvalidInputException
+	public void withdraw(Account accountBeingAccessed, String withdrawAmount) throws SQLException, InvalidInputException
 	{
-		String withdraw = String.valueOf(withdrawAmount);
-		String accKey = accountBeingAccessed.getAccountOwner() + accountBeingAccessed.getAccountType();
-		
-		if (withdraw.matches("^\\s*$") || withdraw == null)
+		try(Connection con = ConnectionUtil.getConnection())
 		{
-			throw new BlankEntryException("Nothing was entered");
+			double currentBalance = accountBeingAccessed.getBalance();
+			
+			if(currentBalance - Double.parseDouble(withdrawAmount) < 0)
+			{
+				throw new InvalidInputException("That withdrawal amount exceeds your current balance!");
+			}else if(Double.parseDouble(withdrawAmount) <= 0)
+			{
+				throw new InvalidInputException("Withdrawal amount must be greater than 0.");				
+			}
+			
+			accountsDAO.withdraw(accountBeingAccessed.getAccountNumber(), Double.parseDouble(withdrawAmount), con);
+			
 		}
 		
-		if(withdrawAmount > accountBeingAccessed.getBalance())
+	}
+	
+	public void updateAccountStatus(int applicationNumber, String decision) throws SQLException
+	{
+		try(Connection con = ConnectionUtil.getConnection())
 		{
-			throw new InvalidInputException("Insufficient funds, withdraw a smaller amount.");
+			accountsDAO.updateAccountStatus(applicationNumber, decision, con);
+			System.out.println("Account successfully " + decision + ".");
 		}
-		
-		accountsDAO.withdraw(withdrawAmount, accKey);
-		
 	}
 	
 }

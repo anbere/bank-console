@@ -1,7 +1,13 @@
 package com.andres.bank.dao;
 
-import com.andres.bank.model.BankEmployee;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public interface BankEmployeeDAO {
-	public BankEmployee getEmployeeByEmployeeID(int employeeID);
+	
+	public boolean checkEmployeeID(int employeeID, Connection con) throws SQLException;
+	
+	public boolean checkPassword(int employeeID, String password, Connection con) throws SQLException;
+	
+	public boolean checkAdmin(int employeeID, Connection con) throws SQLException;
 }

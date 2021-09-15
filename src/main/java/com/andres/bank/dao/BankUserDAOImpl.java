@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class BankUserDAOImpl implements BankUserDAO {
 
@@ -65,6 +66,24 @@ public class BankUserDAOImpl implements BankUserDAO {
 			throw new SQLException("Did not execute SQL Statement");
 		}
 
+	}
+
+	@Override
+	public ArrayList<String> getAllUsernames(Connection con) throws SQLException {
+		
+		ArrayList<String> usernames = new ArrayList<>();
+		
+		String sql = "SELECT username FROM bank_console.bank_user;";
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		ResultSet rs = ps.executeQuery();
+		
+		while(rs.next()) 
+		{
+			usernames.add(rs.getString("username"));
+		}
+
+		return usernames;
 	}
 
 }

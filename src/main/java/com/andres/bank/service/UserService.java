@@ -2,6 +2,7 @@ package com.andres.bank.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.andres.bank.dao.BankUserDAO;
 import com.andres.bank.dao.BankUserDAOImpl;
@@ -40,7 +41,17 @@ public class UserService {
 				return true;
 			} else
 				throw new IncorrectPasswordException("WRONG PASSWORD");
-
+		}
+	}
+	
+	public ArrayList<String> getAllUsernames() throws SQLException
+	{
+		ArrayList<String> usernames = new ArrayList<>();
+		
+		try(Connection con = ConnectionUtil.getConnection())
+		{
+			usernames = bankUserDAO.getAllUsernames(con);
+			return usernames;
 		}
 	}
 }
